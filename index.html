@@ -14,6 +14,14 @@
     <link href="/index.css" rel="stylesheet" />
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <style>
+      .form-label::first-letter {
+        text-transform: uppercase;
+      }
+      .form-label {
+        text-transform: lowercase;
+      }
+    </style>
   </head>
   <body>
     <div
@@ -145,8 +153,22 @@
               background-attachment: fixed;
             "
           >
+            <nav class="navbar text-center mx-auto">
+              <div class="container-fluid text-center mx-auto">
+                <a class="navbar-brand text-center mx-auto" href="#">
+                  <img
+                    src="/WhatsApp_Image_2023-12-27_at_15.33.43-removebg-preview.png"
+                    alt="Logo"
+                    style="width: 250px; height: 150px"
+                    class="img-fluid text-center mx-auto"
+                  />
+                  <br />
+                  <!-- <span id="datetime" class="mx-5"></span> -->
+                </a>
+              </div>
+            </nav>
             <div class="container text-center mx-auto">
-              <h1 class="happy">Happy New Year 2024</h1>
+              <h1 class="happy">Happy New Year</h1>
             </div>
             <div id="formDetails" class="container mt-3 mb-3"></div>
             <br />
@@ -246,7 +268,11 @@
           link.href = imgData;
           link.download = "modal_image.jpg";
           link.click();
+          resetForm();
         });
+      }
+      function resetForm() {
+        document.getElementById("myForm").reset();
       }
     </script>
   </body>
