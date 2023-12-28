@@ -11,6 +11,11 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+
+
+    <link rel="icon" type="image/x-icon" href="{% static 'images/WhatsApp_Image_2023-12-27_at_15.33.43-removebg-preview.png' %}">
     <!-- <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.3.2/dist/html2canvas.min.js"></script> -->
     <link href="{% static 'css/index.css' %}" rel="stylesheet" />
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -58,7 +63,7 @@
           class="col-sm-4"
           style="backdrop-filter: blur(10px); padding: 1em 1em 1em"
         >
-          <form id="myForm" method="post" action="{% url 'index' %}" >
+          <form id="myForm" method="post" action="{% url 'index' %}" enctype="multipart/form-data" >
             {% csrf_token %}
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">Name: </label>
@@ -112,6 +117,7 @@
               />
             </div>
 
+            <img src="" name="img" id="img" alt="">
             <div class="container mt-3 text-center mx-auto">
               <button
                 type="button"
@@ -197,6 +203,12 @@
               onclick="downloadModalImage()"
             >
               Download Image
+            </button>
+            <button
+            type="button"
+            class="btn btn-primary"
+            onclick="captureModalContent()">
+            Capture Image
             </button>
           </div>
         </div>
@@ -290,13 +302,33 @@
       document.getElementById("exampleModal").addEventListener("hidden.bs.modal", function () {
         resetForm();
       });
-      
+
       function submitFormAndReset() {
         // Submit the form
         document.getElementById("myForm").submit();
     
         // Reset the form
         resetForm();
+      }
+
+      // captureModalContent()
+    </script>
+
+    <script>
+      function captureModalContent() {
+        const modalContent = document.getElementById('exampleModal'); // Get the modal content div
+
+        html2canvas(modalContent).then(function(canvas) {
+          // Convert the captured content to an image
+          var imgData = canvas.toDataURL('image/png');
+
+          // Create a new image element and set its source to the captured content
+          var img = document.getElementById('img')
+          img.src = imgData;
+
+          // Append the image to a container or display it as needed
+          document.body.appendChild(img); // For example, append to the body
+        });
       }
     </script>
     
