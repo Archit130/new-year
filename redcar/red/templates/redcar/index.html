@@ -148,15 +148,7 @@
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <!-- <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">New Year Party</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div> -->
+
           <div
             class="modal-body"
             id="modalBody"
@@ -204,11 +196,11 @@
             >
               Download Image
             </button>
-            <!-- <a href="http://web.cloudwhatsapp.com/wapp/api/send?apikey=427870336a6d45359a394f7f89cf5cba&mobile=7814574759&msg=testmsg">Send Image</a> -->
+            <a href="http://web.cloudwhatsapp.com/wapp/api/send?apikey=427870336a6d45359a394f7f89cf5cba&mobile=7814574759&msg=testmsg">Send Image</a>
             <button
               type="button"
               class="btn btn-primary"
-              onclick="sendImageAsURL()"
+              id="sendImageButton"
             >
               Send Image
             </button>
@@ -296,7 +288,46 @@
           link.download = "modal_image.jpg";
           link.click();
 
+          var apiUrl = 'http://web.cloudwhatsapp.com/wapp/api/send?apikey=427870336a6d45359a394f7f89cf5cba&mobile=7814574759';
 
+          // Encode the imgData to be used as a payload in the request body
+          var encodedImgData = encodeURIComponent(imgData);
+
+          // Construct the payload object
+          var payload = {
+            msg: encodedImgData
+          };
+
+          // Make a POST request using fetch
+          fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          })
+          .then(response => {
+            if (response.ok) {
+              // Request was successful
+              console.log("Test1")
+              return response.json(); // Assuming the response is JSON
+            } else {
+              // Handle errors
+              console.log("Test12")
+
+              throw new Error('Network response was not ok.');
+            }
+          })
+          .then(data => {
+            // Handle the response data here
+            console.log(data);
+            console.log("Test2")
+
+          })
+          .catch(error => {
+            // Handle any errors that occurred during the fetch
+            console.error('Fetch error:', error);
+          });
           // ########################### AJAX ##############################
           let name = $('#name').val();
           let phone = $('#phone').val()
@@ -344,26 +375,7 @@
 
       // captureModalContent()
 
-      function sendImageAsURL() {
-        var imgData = document.getElementById("img").src; // Assuming "img" is your <img> tag
 
-        // Encode the image data to be used as a query parameter
-        var encodedImgData = encodeURIComponent(imgData);
-
-        // Construct the URL with the image data as a parameter
-        var mobileNumber = "7814574759"; // Replace with the desired mobile number
-        var apiKey = "427870336a6d45359a394f7f89cf5cba"; // Replace with your API key
-        var apiUrl = `http://web.cloudwhatsapp.com/wapp/api/send?apikey=${apiKey}&mobile=${mobileNumber}&imgData=${encodedImgData}`;
-
-        // Create a link to open the URL (optional)
-        var link = document.createElement("a");
-        link.href = apiUrl;
-        link.textContent = "Send Image";
-        document.body.appendChild(link); // Append the link to the document (optional)
-
-        // Alternatively, if you want to open this URL in a new window
-        // window.open(apiUrl);
-    }
     </script>
 
     
