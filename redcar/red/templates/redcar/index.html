@@ -70,7 +70,7 @@
               <input
                 type="name"
                 class="form-control"
-                id="exampleInputEmail1"
+                id="name"
                 name="name"
                 required
               />
@@ -83,7 +83,7 @@
               <input
                 type="tel"
                 class="form-control"
-                id="mobile"
+                id="phone"
                 placeholder="10 digits"
                 maxlength="10"
                 name="phone"
@@ -97,7 +97,7 @@
               <input
                 type="number"
                 class="form-control"
-                id="exampleInputPassword1"
+                id="adult"
                 min="0"
                 name="adult"
                 required
@@ -110,13 +110,13 @@
               <input
                 type="number"
                 class="form-control"
-                id="exampleInputPassword2"
+                id="child"
                 min="0"
                 name="child"
                 required
               />
             </div>
-
+            <input type="hidden" id="imgData" name="imgData">
             <img src="" name="img" id="img" alt="">
             <div class="container mt-3 text-center mx-auto">
               <button
@@ -204,17 +204,20 @@
             >
               Download Image
             </button>
+            <!-- <a href="http://web.cloudwhatsapp.com/wapp/api/send?apikey=427870336a6d45359a394f7f89cf5cba&mobile=7814574759&msg=testmsg">Send Image</a> -->
             <button
-            type="button"
-            class="btn btn-primary"
-            onclick="captureModalContent()">
-            Capture Image
+              type="button"
+              class="btn btn-primary"
+              onclick="sendImageAsURL()"
+            >
+              Send Image
             </button>
           </div>
         </div>
       </div>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
@@ -239,10 +242,10 @@
     <script>
       function generateQRCode() {
         // Get form data
-        var name = document.getElementById("exampleInputEmail1").value;
-        var mobileNumber = document.getElementById("mobile").value;
-        var adultCount = document.getElementById("exampleInputPassword1").value;
-        var childrenCount = document.getElementById("exampleInputPassword2").value;
+        var name = document.getElementById("name").value;
+        var mobileNumber = document.getElementById("phone").value;
+        var adultCount = document.getElementById("adult").value;
+        var childrenCount = document.getElementById("child").value;
       // Check if any required field is empty
       if (name === "" || mobileNumber === "" || adultCount === "" || childrenCount === "") {
         alert("Please fill in all the required fields.");
@@ -281,11 +284,39 @@
     
         html2canvas(modalBody).then(function (canvas) {
           var imgData = canvas.toDataURL("image/jpeg");
-    
+
+          // Image Data
+          document.getElementById("img").src = imgData;
+
+          // Set the image data to the hidden input field
+          document.getElementById("imgData").value = imgData;
+          
           var link = document.createElement("a");
           link.href = imgData;
           link.download = "modal_image.jpg";
           link.click();
+
+
+          // ########################### AJAX ##############################
+          let name = $('#name').val();
+          let phone = $('#phone').val()
+          let adult = $('#adult').val()
+          let child = $('#child').val()
+          console.log("Data: ", name, phone)
+
+          // $.ajax({
+          //       type: 'POST',
+          //       url: '{% url "index" %}', // URL to submit the form data
+          //       data: {'name': name, 'phone': phone, 'adult': adult, 'child': child, 'img': imgData},
+          //       success: function(response) {
+                  
+          //           console.log('Form submitted successfully:', response);
+          //       },
+          //       error: function(error) {
+          //           console.error('Error submitting form:', error);
+          //       }
+          //   });
+
         });
       }
     
@@ -312,26 +343,29 @@
       }
 
       // captureModalContent()
+
+      function sendImageAsURL() {
+        var imgData = document.getElementById("img").src; // Assuming "img" is your <img> tag
+
+        // Encode the image data to be used as a query parameter
+        var encodedImgData = encodeURIComponent(imgData);
+
+        // Construct the URL with the image data as a parameter
+        var mobileNumber = "7814574759"; // Replace with the desired mobile number
+        var apiKey = "427870336a6d45359a394f7f89cf5cba"; // Replace with your API key
+        var apiUrl = `http://web.cloudwhatsapp.com/wapp/api/send?apikey=${apiKey}&mobile=${mobileNumber}&imgData=${encodedImgData}`;
+
+        // Create a link to open the URL (optional)
+        var link = document.createElement("a");
+        link.href = apiUrl;
+        link.textContent = "Send Image";
+        document.body.appendChild(link); // Append the link to the document (optional)
+
+        // Alternatively, if you want to open this URL in a new window
+        // window.open(apiUrl);
+    }
     </script>
 
-    <script>
-      function captureModalContent() {
-        const modalContent = document.getElementById('exampleModal'); // Get the modal content div
-
-        html2canvas(modalContent).then(function(canvas) {
-          // Convert the captured content to an image
-          var imgData = canvas.toDataURL('image/png');
-
-          // Create a new image element and set its source to the captured content
-          var img = document.getElementById('img')
-          img.src = imgData;
-
-          // Append the image to a container or display it as needed
-          document.body.appendChild(img); // For example, append to the body
-        });
-      }
-    </script>
-    
     
   </body>
 </html>
